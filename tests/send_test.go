@@ -7,10 +7,10 @@ import (
 )
 
 func Test_Send(t *testing.T) {
-	key := "f0c332c7-8a9c-433e-82c8-304xxxxxx"
-	if flag, err := gowecom.Set(key).SendMarkdown("包测试"); err != nil {
+	key := "f0c332c7-8a9c-433e-82c8-30469ca87xxx"
+	if err := gowecom.Set(key).SendMarkdown("hello word"); err != nil {
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println("测试失败", flag)
+		fmt.Println("测试成功")
 	}
 }

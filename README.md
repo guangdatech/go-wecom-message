@@ -20,7 +20,7 @@ import (
 
 func Test_Send(t *testing.T) {
 	key := "xxxxx-8a9c-433e-82c8-xxxx" //企业微信群机器人的key
-	if flag, err := gowecom.Set(key).SendMarkdown("包测试"); err != nil {
+	if flag, err := gowecom.Set(key).SendMarkdown("Hello word"); err != nil {
 		fmt.Println(err.Error())
 	} else {
 		fmt.Println("发送成功", flag)

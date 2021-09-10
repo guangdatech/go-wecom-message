@@ -1,9 +1,9 @@
 package gowecom
 
 import (
+	"encoding/json"
 	"errors"
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/guangdatech/go-wecom-message/library"
 	"github.com/guangdatech/go-wecom-message/model"
 )
 
@@ -21,7 +21,7 @@ func Set(key string) *send {
 
 // SendMarkdown send a message
 // 参见: https://work.weixin.qq.com/api/doc/90000/90136/91770
-func (s *send) SendMarkdown(msg string) (bool, error) {
+func (s *send) SendMarkdown(msg string) error {
 	req := &model.RobotMarkdown{}
 	req.Content = msg
 	message := &model.RoBotMsgBody{
@@ -29,24 +29,29 @@ func (s *send) SendMarkdown(msg string) (bool, error) {
 		Markdown: req,
 	}
 	url := "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=" + s.key
-	rsp, err := g.Client().Header(map[string]string{
-		"Content-Type": "application/json",
-	}).Post(url, gconv.String(message))
-	sendRsp := &model.SendRsp{}
-	if rsp != nil {
-		defer rsp.Close()
+	return Send(url,message)
+
+}
+
+//Send 发送请求
+func Send(url string ,message *model.RoBotMsgBody) error{
+	rsp,err:=library.Post(url, message,"application/json")
+
+	if err!=nil{
+		return err
 	}
-	if err != nil {
-		return false, err
+
+	sendRsp:=&model.SendRsp{}
+	if err=json.Unmarshal([]byte(rsp),&sendRsp);err!=nil{
+		return err
 	}
-	err = gconv.Scan(rsp.ReadAllString(), &sendRsp)
-	if err != nil {
-		return false, err
-	}
+
 	if sendRsp.ErrMsg == "ok" {
-		return true, nil
+		return  nil
 	} else {
-		return false, errors.New(sendRsp.ErrMsg)
+		return  errors.New(sendRsp.ErrMsg)
 	}
 
 }
+
+
