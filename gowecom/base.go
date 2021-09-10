@@ -11,7 +11,6 @@ type send struct {
 	key string
 }
 
-
 func Set(key string) *send {
 	entity := &send{
 		key: key,
@@ -29,29 +28,26 @@ func (s *send) SendMarkdown(msg string) error {
 		Markdown: req,
 	}
 	url := "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=" + s.key
-	return Send(url,message)
-
+	return Send(url, message)
 }
 
 //Send 发送请求
-func Send(url string ,message *model.RoBotMsgBody) error{
-	rsp,err:=library.Post(url, message,"application/json")
+func Send(url string, message *model.RoBotMsgBody) error {
+	rsp, err := library.Post(url, message, "application/json")
 
-	if err!=nil{
+	if err != nil {
 		return err
 	}
 
-	sendRsp:=&model.SendRsp{}
-	if err=json.Unmarshal([]byte(rsp),&sendRsp);err!=nil{
+	sendRsp := &model.SendRsp{}
+	if err = json.Unmarshal([]byte(rsp), &sendRsp); err != nil {
 		return err
 	}
 
 	if sendRsp.ErrMsg == "ok" {
-		return  nil
+		return nil
 	} else {
-		return  errors.New(sendRsp.ErrMsg)
+		return errors.New(sendRsp.ErrMsg)
 	}
 
 }
-
-

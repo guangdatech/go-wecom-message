@@ -14,8 +14,7 @@ import (
 // contentType： 请求体格式，如：application/json
 // content：     请求放回的内容
 // 错误信息
-func Post(url string, data interface{}, contentType string) (string,error) {
-
+func Post(url string, data interface{}, contentType string) (string, error) {
 	// 超时时间：5秒
 	client := &http.Client{Timeout: 20 * time.Second}
 	jsonStr, _ := json.Marshal(data)
@@ -27,6 +26,5 @@ func Post(url string, data interface{}, contentType string) (string,error) {
 	defer resp.Body.Close()
 
 	result, _ := ioutil.ReadAll(resp.Body)
-	return string(result),nil
+	return string(result), nil
 }
-
