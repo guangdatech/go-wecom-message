@@ -1,4 +1,4 @@
-package util
+package message
 
 import (
 	"errors"
@@ -11,7 +11,6 @@ type send struct {
 	key string
 }
 
-var Send send
 
 func Set(key string) *send {
 	entity := &send{
@@ -21,6 +20,7 @@ func Set(key string) *send {
 }
 
 // SendMarkdown send a message
+// 参见: https://work.weixin.qq.com/api/doc/90000/90136/91770
 func (s *send) SendMarkdown(msg string) (bool, error) {
 	req := &model.RobotMarkdown{}
 	req.Content = msg
